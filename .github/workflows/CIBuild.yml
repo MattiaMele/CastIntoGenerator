@@ -35,7 +35,7 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: Binario
+        name: Binary
         path: CastIntoGenerator/bin/Release/CastIntoGenerator.exe
     
         
@@ -47,7 +47,7 @@ jobs:
       with:
         tag_name: 1.${{ steps.buildnumber.outputs.build_number }}
         release_name: Release 1.${{ steps.buildnumber.outputs.build_number }}
-        body: Versione 1.${{ steps.buildnumber.outputs.build_number }}
+        body: Version 1.${{ steps.buildnumber.outputs.build_number }}
         draft: false
         prerelease: false
         
