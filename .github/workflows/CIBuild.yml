@@ -1,16 +1,24 @@
-name: Build Pipeline
+name: Publish Pipeline
 
 on:
   push:
-    branches: [ master ]
+    branches: [ Release ]
   
 jobs:
   build:
 
     runs-on: windows-latest
-
+    outputs:
+      build_number: ${{ steps.buildnumber.outputs.build_number }}
     steps:
     - uses: actions/checkout@v2
+   
+    - name: Generate build number
+      id: buildnumber
+      uses: einaregilsson/build-number@v2 
+      with:
+        token: ${{secrets.github_token}}
+        prefix: vOne
     
     - name: setup-msbuild
       uses: microsoft/setup-msbuild@v1
@@ -29,5 +37,32 @@ jobs:
       with:
         name: Binario
         path: CastIntoGenerator/bin/Release/CastIntoGenerator.exe
+    
+        
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: 1.${{ steps.buildnumber.outputs.build_number }}
+        release_name: Release 1.${{ steps.buildnumber.outputs.build_number }}
+        body: Versione 1.${{ steps.buildnumber.outputs.build_number }}
+        draft: false
+        prerelease: false
+        
+    - name: Upload Release Asset
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} 
+        asset_path: CastIntoGenerator/bin/Release/CastIntoGenerator.exe
+        asset_name: CastIntoGenerator.exe
+        asset_content_type: application/vnd.microsoft.portable-executable
+       
+        
+    
       
  
