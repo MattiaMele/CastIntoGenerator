@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CastIntoGenerator", "CastIntoGenerator\CastIntoGenerator.csproj", "{B2D52810-3CE6-459C-8408-B8222447AB93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CastIntoGeneratorBiz", "CastIntoGeneratorBiz\CastIntoGeneratorBiz.csproj", "{0C788CE5-FD8E-429D-AC52-E3099C2477EE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B2D52810-3CE6-459C-8408-B8222447AB93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2D52810-3CE6-459C-8408-B8222447AB93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2D52810-3CE6-459C-8408-B8222447AB93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2D52810-3CE6-459C-8408-B8222447AB93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C788CE5-FD8E-429D-AC52-E3099C2477EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C788CE5-FD8E-429D-AC52-E3099C2477EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C788CE5-FD8E-429D-AC52-E3099C2477EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C788CE5-FD8E-429D-AC52-E3099C2477EE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {54AC7E65-9D53-422A-B8BF-109F0035AD60}
+	EndGlobalSection
+EndGlobal

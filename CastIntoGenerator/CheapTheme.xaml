@@ -1,0 +1,35 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:CastIntoGenerator">
+    <SolidColorBrush x:Key="ColoreSfondo" Color="#333333"/>
+    <SolidColorBrush x:Key="ColoreTesto" Color="WhiteSmoke"/>
+    <SolidColorBrush x:Key="ColoreTema" Color="#d47f00"/>
+    <Style 
+        TargetType="Window"
+        >
+        <Setter Property="Background" Value="{StaticResource ColoreSfondo}"/>
+    </Style>
+    <Style 
+        TargetType="Grid"
+        >
+        <Setter Property="Background" Value="{StaticResource ColoreSfondo}"/>
+    </Style>
+    <Style
+        TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource ColoreTesto}"/>
+    </Style>
+    <Style
+        TargetType="Label">
+        <Setter Property="Foreground" Value="{StaticResource ColoreTesto}"/>
+    </Style>
+    <Style
+        TargetType="Button">
+        <Setter Property="Foreground" Value="{StaticResource ColoreTesto}"/>
+        <Setter Property="Background" Value="{StaticResource ColoreTema}"/>
+    </Style>
+    <Style
+        TargetType="RichTextBox">
+        <Setter Property="Foreground" Value="{StaticResource ColoreTesto}"/>
+        <Setter Property="Background" Value="{StaticResource ColoreSfondo}"/>
+    </Style>
+</ResourceDictionary>
