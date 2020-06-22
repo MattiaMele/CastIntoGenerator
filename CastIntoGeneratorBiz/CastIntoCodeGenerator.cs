@@ -91,11 +91,13 @@ namespace CastIntoGeneratorBiz
                     break;
                 }
             }
-            for (int i = j+1; i < rigaSplittata.Length; i++)
+            if (j != 0)
             {
-                baseClassesList.Add(rigaSplittata[i]);
+                for (int i = j + 1; i < rigaSplittata.Length; i++)
+                {
+                    baseClassesList.Add(rigaSplittata[i]);
+                }
             }
-
 
             return (className, baseClassesList);
         }
