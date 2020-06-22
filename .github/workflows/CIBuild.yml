@@ -47,7 +47,10 @@ jobs:
       with:
         tag_name: 1.${{ steps.buildnumber.outputs.build_number }}
         release_name: Release 1.${{ steps.buildnumber.outputs.build_number }}
-        body: Version 1.${{ steps.buildnumber.outputs.build_number }}
+        body: |
+          |
+          Version 1.${{ steps.buildnumber.outputs.build_number }} 
+          ${{github.event.head_commit.message}}
         draft: false
         prerelease: false
         
