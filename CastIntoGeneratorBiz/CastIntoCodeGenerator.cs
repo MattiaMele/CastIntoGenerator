@@ -54,7 +54,7 @@ namespace CastIntoGeneratorBiz
 
             sb.AppendLine();
             sb.AppendLine("            return output;");
-            sb.AppendLine("        }");
+            if (ClassNamesFound) { sb.AppendLine("        }"); }
 
             return sb.ToString();
         }
