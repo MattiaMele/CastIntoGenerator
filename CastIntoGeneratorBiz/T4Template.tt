@@ -1,0 +1,223 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#@ assembly name="$(SolutionDir)\SampleDTOLibrary\bin\Debug\SampleDTOLibrary.Dll" #>
+<#
+    //-----------------PARAMETERS-------------------------------------
+
+    string AssemblyFullName = "SampleDTOLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"; //-Also add the full path to the @Assembly directive above
+    
+    string NameSpace = null;
+
+
+    //----------------------------------------------------------------
+
+    Assembly ass = Assembly.Load(AssemblyFullName);
+
+#>
+
+namespace <#= NameSpace ?? ass.GetName().Name + "Extensions" #>
+{
+
+    public static partial class CastIntoExtensions
+    {
+<#
+	
+	List<VType> vTypeList = GetVTypesFromAssembly(ass);
+
+    foreach(VType vType in vTypeList)
+    {
+{#>
+        public static T CastInto<T>(this <#= vType.Name #> input, T output = default) where T : <#= vType.Name #>, new()
+        {
+            if (output == null)
+                output = new T();
+
+<#}
+
+        foreach(string baseType in vType.BaseTypeNames)
+        {
+{#>            (input as <#= baseType #>).CastInto(output);
+<#}
+        }
+
+{#>
+<#}
+
+        foreach(string prop in vType.PropertyNames)
+        {
+{#>            output.<#= prop #> = input.<#= prop #>;
+<#}
+        }
+
+{#>            
+            return output;
+        }
+<#}
+
+    }
+#>
+}
+}
+
+<#+ 
+public List<VType> GetVTypesFromAssembly(Assembly ass)
+{
+    Dictionary<string,(Type t, VType vt)> dictVTypes = new Dictionary<string, (Type t, VType vt)>();
+    Type[] castableTypes = ass.GetTypes().Where(x => x.IsClass || x.IsInterface).ToArray();
+    foreach(Type t in castableTypes)
+    {
+
+        VType vt = new VType() 
+        {
+            Name = t.FullName
+        };
+
+        TypeInfo tInfo = IntrospectionExtensions.GetTypeInfo(t);
+        foreach (var property in tInfo.DeclaredProperties.Where(x => x.CanWrite && x.GetSetMethod(true).IsPublic && x.CanRead && x.GetGetMethod(true).IsPublic))
+        {
+            vt.PropertyNames.Add(property.Name);
+        }
+
+        dictVTypes.Add(vt.Name,(t,vt));
+
+    }
+    (Type t, VType vt)[] TypesToCast = dictVTypes.Select(x=>x.Value).ToArray();
+
+    for(int i = 0; i < TypesToCast.Length; i++)
+    {
+        foreach (var I in TypesToCast[i].t.GetInterfaces().Where(x => dictVTypes.ContainsKey(x.FullName)))
+        {
+            if (AIsDirectImplementationOfB(TypesToCast[i].vt,dictVTypes[I.FullName].t))
+            {
+                TypesToCast[i].vt.DirectlyImplements = I.FullName;
+            }
+        }
+    }
+    TypesToCast = TypesToCast.Where(x => x.vt.DirectlyImplements == null).ToArray();
+
+    foreach(var typeToCast in TypesToCast)
+    {
+        List<string> propsAccountedFor = new List<string>();
+        List<string> typesAccountedFor = new List<string>();
+
+        IEnumerable<Type> baseTypesI = typeToCast.t.GetInterfaces();
+
+        if(typeToCast.t.IsClass && castableTypes.Contains(typeToCast.t.BaseType ?? typeof(object))) 
+        { baseTypesI = baseTypesI.Append(typeToCast.t.BaseType); }
+
+        Type[] baseTypes = PartialOrderBy(baseTypesI,x => x, new TypeHierarchyComparer()).ToArray();
+                
+        for(int i = 0; i < baseTypes.Length; i++)
+        {
+            if (i != baseTypes.Length - 1 &&
+            (baseTypes[i].IsClass && baseTypes[i].BaseType.FullName == baseTypes[i + 1].FullName
+            || baseTypes[i].GetInterfaces().Contains(baseTypes[i + 1])))
+            {
+                typesAccountedFor.Add(baseTypes[i + 1].FullName);
+            }
+
+            if(typesAccountedFor.Contains(baseTypes[i].FullName) == false)
+            {
+                var newProps = dictVTypes[baseTypes[i].FullName].vt.PropertyNames.Except(propsAccountedFor).ToList();
+                if (newProps.Count > 0)
+                {
+                    typeToCast.vt.BaseTypeNames.Add(baseTypes[i].FullName);
+                    propsAccountedFor.AddRange(newProps);
+                }
+            }
+        }
+    }
+
+    return dictVTypes.Where(x=>x.Value.vt.DirectlyImplements == null).Select(x=>x.Value.vt).ToList();
+}
+
+public bool AIsDirectImplementationOfB (VType A, Type B)
+        {
+            if(B.IsInterface == false) { return false; }
+            var propertiesOfB = GetAllProperties(B).Select(x => x.Name).ToArray();
+            foreach (string prop1 in A.PropertyNames)
+            {
+                if (propertiesOfB.Contains(prop1) == false) { return false; }
+            }
+            return A.PropertyNames.Count == propertiesOfB.Count();
+        }
+        public IEnumerable<PropertyInfo> GetAllProperties(Type t)
+        {
+            foreach(PropertyInfo prop in t.GetRuntimeProperties()) { yield return prop; }
+            foreach(var i in t.GetInterfaces())
+            {
+                foreach (var toRet in GetAllProperties(i)) { yield return toRet; }
+            }
+            yield break;
+        }
+public IEnumerable<TSource> PartialOrderBy<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer)
+{
+    List<TSource> list = source.ToList();
+    while (list.Count > 1)
+    {
+        TSource min = list[0];
+        TKey minKey = keySelector(min);
+        int i = list.Count;
+
+    Loop:
+        if (--i < 0) { throw new Exception("Circular relationship found with the comparer"); }
+        foreach (TSource element in list)
+        {
+            TKey elementKey = keySelector(element);
+            if (comparer.Compare(elementKey, minKey) < 0)
+            {
+                min = element;
+                minKey = elementKey;
+                goto Loop;
+            }
+        }
+
+        yield return min;
+        list.Remove(min);
+    }
+    if (list.Count == 1) { yield return list[0]; }
+    yield break;
+}
+public class VType
+{
+    public string Name { get; set; }
+    public List<string> BaseTypeNames { get; set; } = new List<string>();
+    public List<string> PropertyNames { get; set; } = new List<string>();
+    public string DirectlyImplements { get; set; }
+}
+public class TypeHierarchyComparer : IComparer<Type>
+{
+    public int Compare(Type x, Type y)
+    {
+        if (x.IsClass && y.IsInterface) 
+        {
+            if(x.GetInterfaces().Contains(y)) { return -1; }
+            else { return 0; }
+        }
+        else if (x.IsInterface && y.IsClass) 
+        {
+            if (y.GetInterfaces().Contains(x)) { return 1; }
+            else { return 0; }
+        }
+        else if (x.IsClass && y.IsClass)
+        {
+            if (x.BaseType == y) { return -1; }
+            else if (y.BaseType == x) { return 1; }
+            else { return 0; }
+        }
+        else if (x.IsInterface && y.IsInterface)
+        {
+            if (x.GetInterfaces().Contains(y)) { return -1; }
+            else if (y.GetInterfaces().Contains(x)) { return 1; }
+            else { return 0; }
+        }
+        else { return 0; }
+    }
+}
+#>
+
