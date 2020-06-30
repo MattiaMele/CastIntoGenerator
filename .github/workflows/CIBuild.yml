@@ -54,7 +54,7 @@ jobs:
         prerelease: false
         
     - name: Upload Release Asset
-      id: upload-release-asset 
+      id: upload-exe 
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -63,6 +63,17 @@ jobs:
         asset_path: CastIntoGenerator/bin/Release/CastIntoGenerator.exe
         asset_name: CastIntoGenerator.exe
         asset_content_type: application/vnd.microsoft.portable-executable
+        
+    - name: Upload Release Asset
+      id: upload-T4 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} 
+        asset_path: CastIntoGeneratorBiz/T4Template.tt
+        asset_name: T4Template.tt
+        asset_content_type: text
        
         
     
