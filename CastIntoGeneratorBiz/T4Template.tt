@@ -68,7 +68,7 @@ namespace <#= NameSpace ?? ass.GetName().Name + "Extensions" #>
 public List<VType> GetVTypesFromAssembly(Assembly ass)
 {
     Dictionary<string,(Type t, VType vt)> dictVTypes = new Dictionary<string, (Type t, VType vt)>();
-    Type[] castableTypes = ass.GetTypes().Where(x => x.IsClass || x.IsInterface).ToArray();
+    Type[] castableTypes = ass.GetTypes().Where(x =>x.IsAbstract == false  && x.IsClass || x.IsInterface).ToArray();
     foreach(Type t in castableTypes)
     {
 
