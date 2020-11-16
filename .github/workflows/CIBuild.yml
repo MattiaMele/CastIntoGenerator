@@ -6,10 +6,12 @@ on:
   
 jobs:
   build:
-
+    
     runs-on: windows-latest
     outputs:
       build_number: ${{ steps.buildnumber.outputs.build_number }}
+    env: 
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
     - uses: actions/checkout@v2
    
@@ -19,9 +21,7 @@ jobs:
       with:
         token: ${{secrets.github_token}}
         prefix: vOne
-      env: 
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: true  
-    
+         
     - name: setup-msbuild
       uses: microsoft/setup-msbuild@v1
       
