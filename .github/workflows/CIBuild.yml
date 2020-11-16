@@ -19,6 +19,8 @@ jobs:
       with:
         token: ${{secrets.github_token}}
         prefix: vOne
+      env: 
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true  
     
     - name: setup-msbuild
       uses: microsoft/setup-msbuild@v1
