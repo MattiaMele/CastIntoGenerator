@@ -32,4 +32,8 @@
         <Setter Property="Foreground" Value="{StaticResource ColoreTesto}"/>
         <Setter Property="Background" Value="{StaticResource ColoreSfondo}"/>
     </Style>
+    <Style
+        TargetType="CheckBox">
+        <Setter Property="Foreground" Value="{StaticResource ColoreTesto}" />
+    </Style>
 </ResourceDictionary>

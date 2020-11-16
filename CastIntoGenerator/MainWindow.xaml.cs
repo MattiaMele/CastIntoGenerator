@@ -95,5 +95,10 @@ namespace CastIntoGenerator
             // representing the plain text content of the TextRange.
             return textRange.Text;
         }
+
+        private void CheckBox_AdvancedParsing_Checking(object sender, RoutedEventArgs e)
+        {
+            CastIntoCodeGenerator.AdvancedParsing = (sender as CheckBox).IsChecked ?? false;
+        }
     }
 }
