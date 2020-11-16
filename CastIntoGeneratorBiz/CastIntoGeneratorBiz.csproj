@@ -48,6 +48,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>T4Template.tt</DependentUpon>
     </Compile>
+    <Compile Include="TestBed.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="T4Template.tt">
