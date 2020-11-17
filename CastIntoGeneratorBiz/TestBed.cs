@@ -60,11 +60,12 @@ namespace CastIntoGeneratorBiz
 
             (input as Test2).CastInto(output);
 
-            output.ListaOggetti = input.ListaOggetti.Select(x => x.CastInto(new Test1())).ToList();
-            output.ArrayOggetti = input.ArrayOggetti.Select(x => x.CastInto(new Test1())).ToArray();
+            output.ListaOggetti = input.ListaOggetti?.Select(x => x?.CastInto(new Test1())).ToList();
+            output.ArrayOggetti = input.ArrayOggetti?.Select(x => x?.CastInto(new Test1())).ToArray();
 
             return output;
         }
+
 
     }
 }

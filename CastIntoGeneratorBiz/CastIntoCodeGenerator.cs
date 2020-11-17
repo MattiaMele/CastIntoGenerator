@@ -177,24 +177,24 @@ namespace CastIntoGeneratorBiz
             {
                 string type = tipoPropieta.Substring(5, tipoPropieta.Length - 6);
                 if (_baseTypesNames.Contains(type)) 
-                { return $"            output.{nomePropieta}=input.{nomePropieta}.ToList();"; }
+                { return $"            output.{nomePropieta}=input.{nomePropieta}?.ToList();"; }
                 else 
-                { return $"            output.{nomePropieta}=input.{nomePropieta}.Select(x=>x.CastInto(new {type}())).ToList();"; }
+                { return $"            output.{nomePropieta}=input.{nomePropieta}?.Select(x=>x?.CastInto(new {type}())).ToList();"; }
             }
             else if (tipoPropieta.EndsWith("[]"))
             {
                 string type = tipoPropieta.Substring(0, tipoPropieta.Length - 2);
                 if (_baseTypesNames.Contains(type))
-                { return $"            output.{nomePropieta}=input.{nomePropieta}.ToArray();"; }
+                { return $"            output.{nomePropieta}=input.{nomePropieta}?.ToArray();"; }
                 else
-                { return $"            output.{nomePropieta}=input.{nomePropieta}.Select(x=>x.CastInto(new {type}())).ToArray();"; }
+                { return $"            output.{nomePropieta}=input.{nomePropieta}?.Select(x=>x?.CastInto(new {type}())).ToArray();"; }
             }
             else
             {
                 if (_baseTypesNames.Contains(tipoPropieta))
                 { return $"            output.{nomePropieta}=input.{nomePropieta};"; }
                 else
-                { return $"            output.{nomePropieta}=input.{nomePropieta}.CastInto(new {tipoPropieta}());"; }
+                { return $"            output.{nomePropieta}=input.{nomePropieta}?.CastInto(new {tipoPropieta}());"; }
                    
             }
         }
