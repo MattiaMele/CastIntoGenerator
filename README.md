@@ -3,11 +3,8 @@
 A simple tool made to implement an in house pattern for casting c# classes into derived or otherwise compatible versions of themselfs
 
 ```csharp
-public static T CastInto<T>(this TYPE input, T output = default) where T : TYPE, new()
+public static T CastInto<T>(this TYPE input, T output) where T : TYPE
         {
-            if (output == null)
-                output = new T();
-
             BASETYPE.CastInto(input, output); // (Only in case TYPE dervies from BASETYPE, use the direct parent of the type and fill the chain accordingly to the top)
 
             output.PROPERTY1 = input.PROPERTY1; // (Only the properties specific to this TYPE, not ones in base types)
