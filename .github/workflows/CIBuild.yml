@@ -20,7 +20,7 @@ jobs:
       uses: einaregilsson/build-number@v2 
       with:
         token: ${{secrets.github_token}}
-        prefix: vOne
+        prefix: vTwo
          
     - name: setup-msbuild
       uses: microsoft/setup-msbuild@v1
@@ -47,10 +47,10 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: 1.${{ steps.buildnumber.outputs.build_number }}
-        release_name: Release 1.${{ steps.buildnumber.outputs.build_number }}
+        tag_name: 2.${{ steps.buildnumber.outputs.build_number }}
+        release_name: Release 2.${{ steps.buildnumber.outputs.build_number }}
         body: |
-          Version 1.${{ steps.buildnumber.outputs.build_number }} 
+          Version 2.${{ steps.buildnumber.outputs.build_number }} 
           ${{github.event.head_commit.message}}
         draft: false
         prerelease: false
