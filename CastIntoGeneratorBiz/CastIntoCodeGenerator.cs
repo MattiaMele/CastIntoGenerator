@@ -98,19 +98,16 @@ namespace CastIntoGeneratorBiz
                 {
                     ClassNamesFound = true;
                     var Nomi = _GetClassNames(rigaSplittata);
-                    sb.AppendLine($"        public static T CastInto<T>(this {Nomi.ClassName} input, T output = default) where T : {Nomi.ClassName}, new()");
+                    sb.AppendLine($"        public static T CastInto<T>(this {Nomi.ClassName} input, T output) where T : {Nomi.ClassName}");
                     sb.AppendLine("        {");
-                    sb.AppendLine("            if (output == null)");
-                    sb.AppendLine("                output = new T();");
                     if(Nomi.BaseClassesList.Count > 0)
                     {
-                        sb.AppendLine();
                         foreach (string BaseClass in Nomi.BaseClassesList)
                         {
                             sb.AppendLine($"            (input as {BaseClass}).CastInto(output);");
                         }
+                        sb.AppendLine();
                     }
-                    sb.AppendLine();
                 }
                 else if (rigaSplittata.Length > 2 && rigaSplittata[2].StartsWith("{"))
                 { sb.AppendLine(_GetCastLine(rigaSplittata[1], rigaSplittata[0])); }
