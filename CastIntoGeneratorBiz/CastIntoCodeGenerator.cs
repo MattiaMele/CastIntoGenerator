@@ -98,7 +98,7 @@ namespace CastIntoGeneratorBiz
                 {
                     ClassNamesFound = true;
                     var Nomi = _GetClassNames(rigaSplittata);
-                    sb.AppendLine($"        public static T CastInto<T>(this {Nomi.ClassName} input, T output = default) where T : {Nomi.ClassName}");
+                    sb.AppendLine($"        public static T CastInto<T>(this {Nomi.ClassName} input, T output) where T : {Nomi.ClassName}");
                     sb.AppendLine("        {");
                     if(Nomi.BaseClassesList.Count > 0)
                     {
