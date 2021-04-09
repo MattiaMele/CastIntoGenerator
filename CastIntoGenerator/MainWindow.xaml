@@ -33,7 +33,13 @@
             <TextBlock 
             Text="Copy the code of the properites you want to cast, optionally paste on the left"
             HorizontalAlignment="Center"/>
-            <CheckBox
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <TextBlock
+                    Margin="5"
+                    VerticalAlignment="Center"
+                    Text="(v.2)"
+                    />
+                <CheckBox
                 x:Name="CheckBox_AdvancedParsing"
                 IsChecked="True"
                 Unchecked="CheckBox_AdvancedParsing_Checking"
@@ -42,6 +48,8 @@
                 Margin="5"
                 Content="Advanced Parsing"
                 ToolTip="If not checked, property type will be ignored"/>
+            </StackPanel>
+            
         </StackPanel>
         <RichTextBox Grid.Row="1" Grid.Column="0"
                      Name="TextBoxInput"
